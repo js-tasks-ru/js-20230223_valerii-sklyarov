@@ -5,5 +5,12 @@
  * @returns {string[]}
  */
 export function sortStrings(arr, param = 'asc') {
+  if (param === 'asc') {
+    return new Array(...arr).sort(sortFunc);
+  }
+  return new Array(...arr).sort(sortFunc).reverse();
+}
 
+function sortFunc(a, b) {
+  return a.localeCompare(b, 'ru-RU', { sensitivity: 'variant', caseFirst: 'upper'});
 }
