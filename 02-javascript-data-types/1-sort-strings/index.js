@@ -6,11 +6,14 @@
  */
 export function sortStrings(arr, param = 'asc') {
   if (param === 'asc') {
-    return new Array(...arr).sort(sortFunc);
+    return new Array(...arr).sort(sortFuncASC);
   }
-  return new Array(...arr).sort(sortFunc).reverse();
+  return new Array(...arr).sort(sortFuncDESC);
 }
 
-function sortFunc(a, b) {
+function sortFuncASC(a, b) {
   return a.localeCompare(b, 'ru-RU', { sensitivity: 'variant', caseFirst: 'upper'});
+}
+function sortFuncDESC(a, b) {
+  return b.localeCompare(a, 'ru-RU', { sensitivity: 'variant', caseFirst: 'upper'});
 }
