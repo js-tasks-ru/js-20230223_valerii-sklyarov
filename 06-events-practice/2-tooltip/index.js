@@ -26,8 +26,10 @@ class Tooltip {
 
   }
   moveTooltip = (event) => {
-    this.element.style.left = `${Math.round(event.clientX + 50)}px`;
-    this.element.style.top = `${Math.round(event.clientY + 10)}px`;
+    const shiftX = 50;
+    const shiftY = 10;
+    this.element.style.left = `${Math.round(event.clientX + shiftX)}px`;
+    this.element.style.top = `${Math.round(event.clientY + shiftY)}px`;
   }
   showTooltip = (event) => {
     if (!event.target.dataset.tooltip) {
