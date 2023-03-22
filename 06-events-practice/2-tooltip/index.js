@@ -8,8 +8,6 @@ class Tooltip {
     }
     Tooltip.instance = this;
     this.createElement();
-    this.showTooltip = this.showTooltip.bind(this);
-    this.hideTooltip = this.hideTooltip.bind(this);
   }
 
   getTemplate() {
@@ -31,7 +29,7 @@ class Tooltip {
     this.element.style.left = `${Math.round(event.clientX + 50)}px`;
     this.element.style.top = `${Math.round(event.clientY + 10)}px`;
   }
-  showTooltip(event) {
+  showTooltip = (event) => {
     if (!event.target.dataset.tooltip) {
       return;
     }
@@ -43,7 +41,7 @@ class Tooltip {
 
   }
 
-  hideTooltip() {
+  hideTooltip = () => {
     this.remove();
   }
 
