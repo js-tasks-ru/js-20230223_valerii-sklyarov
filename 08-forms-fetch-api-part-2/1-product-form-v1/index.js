@@ -54,7 +54,7 @@ export default class ProductForm {
                     referrer: ''
                 });
 
-                imageListContainer.append(this.getImageItem(result.data.link, file.name));
+                imageListContainer.firstElementChild.append(this.getImageItem(result.data.link, file.name));
 
                 uploadImage.classList.remove('is-loading');
                 uploadImage.disabled = false;
@@ -109,15 +109,6 @@ export default class ProductForm {
     </div>`;
     }
 
-    async createAddForm(productId) {
-        return this.getFormTemplate();
-    }
-
-    async createUpdateForm(productId) {
-        const url = new URL('/api/rest/products/' + productId, BACKEND_URL);
-        this.data = await this.loadData(url);
-        return this.getFormTemplate(this.data);
-    }
 
     loadCategories() {
         return fetchJson(`${BACKEND_URL}/api/rest/categories?_sort=weight&_refs=subcategory`);
@@ -150,19 +141,19 @@ export default class ProductForm {
     }
 
     createFormTitle(data) {
-        const {title} = this.defaultFormData;
         return `
                   <div class="form-group form-group__half_left">
                     <fieldset>
                       <label class="form-label">Название товара</label>
                       <input
+                          id="title"
                           required=""
                           type="text"
                           name="title"
                           class="form-control"
                           placeholder="Название товара"
                           data-element="title"
-                          value="${data.title ? data.title : ''}">
+                          value="${data.title ? escapeHtml(data.title) : ''}">
                     </fieldset>
                   </div>
         `;
@@ -172,7 +163,7 @@ export default class ProductForm {
         return `
          <div class="form-group form-group__wide">
             <label class="form-label">Описание</label>
-            <textarea required="" class="form-control" name="description" data-element="productDescription" placeholder="Описание товара">${data.description ? data.description : ''}</textarea>
+            <textarea required="" id="description" class="form-control" name="description" data-element="productDescription" placeholder="Описание товара">${data.description ? data.description : ''}</textarea>
         </div>
         `;
     }
@@ -205,7 +196,7 @@ export default class ProductForm {
 
     //the method is not finished, it needs to be finalized
     createImageListContainer(data) {
-        let {images} = data;
+        const {images} = data;
         return `
         <div class="form-group form-group__wide" data-element="sortable-list-container">
             <label class="form-label">Фото</label>
@@ -241,7 +232,7 @@ export default class ProductForm {
                     </button>
                 </li>
                 `;
-            });
+            }).join('');
         }
     }
 
@@ -268,6 +259,7 @@ export default class ProductForm {
             <fieldset>
               <label class="form-label">Цена ($)</label>
               <input
+                id="price"
                 required=""
                 type="number"
                 name="price"
@@ -279,6 +271,7 @@ export default class ProductForm {
             <fieldset>
               <label class="form-label">Скидка ($)</label>
               <input
+                id="discount"
                 required=""
                 type="number"
                 name="discount"
@@ -295,7 +288,7 @@ export default class ProductForm {
         return `
       <div class="form-group form-group__part-half">
         <label class="form-label">Количество</label>
-        <input required="" type="number" class="form-control" name="quantity" placeholder="1" value="${data.quantity}">
+        <input required="quantity" id="" type="number" class="form-control" name="quantity" placeholder="1" value="${data.quantity}">
       </div>
         `;
     }
@@ -336,7 +329,6 @@ export default class ProductForm {
                 ? parseInt(value)
                 : value;
         }
-        console.log(values)
         const imagesHTMLCollection = imageListContainer.querySelectorAll('.sortable-table__cell-img');
 
         values.images = [];
